@@ -35,13 +35,26 @@ def declaredatabase(path) -> str:
     print(f"Connected to {databaselocation} successfully")
     return databaselocation
 
-async def givexp(amount , member) -> int:
+def givexp(amount , member) -> int:
     """Will connect and open database then award the user the set amout of xp"""
     try:
         db = sql.connect(databaselocation)
         cursor = db.cursor()
-    except:
-        print( "Could not connect to database. This file may have not been declated, created. Or this file may have been removed or deleted")
+        cursor.execute("SELECT * FROM leveling WHERE GuildID = ? AND UserID = ? AND UserName = ?", (member.guild.id, member.id , member.name))
+        data = cursor.fetchone()
+        if data:
+            cursor.execute("UPDATE leveling SET UserXP = UserXP + ? WHERE GuildID = ? AND UserID = ? AND UserName = ?", (amount, member.guild.id, member.id , member.name))
+            db.commit()
+        else:
+            cursor.execute("INSERT INTO leveling(GuildID, UserID, UserName, UserXP) VALUES (?, ?, ?, ?)", (member.guild.id, member.id , member.name, amount))
+            db.commit()
+    except Exception as e:
+        print(e)
+        return e
+
+
+        
+    
 
 
     
