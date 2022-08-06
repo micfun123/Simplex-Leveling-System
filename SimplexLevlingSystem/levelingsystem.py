@@ -1,10 +1,9 @@
-
 import sqlite3 as sql
 import aiosqlite
 from discord import Guild, Member, Message, TextChannel, User
 import os
 
-databaselocation = ""
+databaselocation = None
 
 def filesetup(path) -> str:
     """
@@ -32,8 +31,17 @@ def filesetup(path) -> str:
 def declaredatabase(path) -> str:
     """declare the locations of the database file"""
     global databaselocation
-    databaselocation = path + "/Leverling.db"
+    databaselocation = path
+    print(f"Connected to {databaselocation} successfully")
     return databaselocation
+
+async def givexp(amount , member) -> int:
+    """Will connect and open database then award the user the set amout of xp"""
+    try:
+        db = sql.connect(databaselocation)
+        cursor = db.cursor()
+    except:
+        print( "Could not connect to database. This file may have not been declated, created. Or this file may have been removed or deleted")
 
 
     
