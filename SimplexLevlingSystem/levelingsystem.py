@@ -1,11 +1,12 @@
 
 import sqlite3 as sql
 import aiosqlite
+from discord import Guild, Member, Message, TextChannel, User
 import os
 
 def filesetup(path) -> str:
     """
-    Makes the database and paths if they don't exist. Then sets up the database.
+    Makes the database and paths if they don't exist the folders and path will be made. Then sets up the database. with data
     """
     print("Setting up files...")
     if not os.path.exists(path):
@@ -25,3 +26,9 @@ def filesetup(path) -> str:
             print("Filemade but set up failed")
     except FileExistsError as e:
         return e
+
+async def givexp(member,amount):
+    """
+    Gives xp to a member.
+    """
+    
