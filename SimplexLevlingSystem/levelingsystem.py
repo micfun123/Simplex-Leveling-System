@@ -4,6 +4,8 @@ import aiosqlite
 from discord import Guild, Member, Message, TextChannel, User
 import os
 
+databaselocation = ""
+
 def filesetup(path) -> str:
     """
     Makes the database and paths if they don't exist the folders and path will be made. Then sets up the database. with data
@@ -27,8 +29,14 @@ def filesetup(path) -> str:
     except FileExistsError as e:
         return e
 
-async def givexp(member,amount):
-    """
-    Gives xp to a member.
-    """
+def declaredatabase(path) -> str:
+    """declare the locations of the database file"""
+    global databaselocation
+    databaselocation = path + "/Leverling.db"
+    return databaselocation
+
+    
+    
+    
+
     
