@@ -35,7 +35,7 @@ def declaredatabase(path) -> str:
     databaselocation = path + "/Leverling.db"
     return databaselocation
 
-    
+
     
     
 
