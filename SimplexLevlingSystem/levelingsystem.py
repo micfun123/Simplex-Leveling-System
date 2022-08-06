@@ -1,8 +1,6 @@
-from cgi import test
-from logging import exception
+
 import sqlite3 as sql
 import aiosqlite
-import asyncio
 import os
 
 def filesetup(path) -> str:

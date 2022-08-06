@@ -1,2 +1,2 @@
 aiosqlite==0.17.0
-asyncio==3.4.3
+pysqlite3==0.4.7
