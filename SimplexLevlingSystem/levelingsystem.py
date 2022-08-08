@@ -35,19 +35,21 @@ def declaredatabase(path) -> str:
     print(f"Connected to {databaselocation} successfully")
     return databaselocation
 
-def givexp(amount , member) -> int:
+async def givexp(amount , member) -> int:
     """Will connect and open database then award the user the set amout of xp"""
     try:
-        db = sql.connect(databaselocation)
-        cursor = db.cursor()
-        cursor.execute("SELECT * FROM leveling WHERE GuildID = ? AND UserID = ? AND UserName = ?", (member.guild.id, member.id , member.name))
-        data = cursor.fetchone()
-        if data:
-            cursor.execute("UPDATE leveling SET UserXP = UserXP + ? WHERE GuildID = ? AND UserID = ? AND UserName = ?", (amount, member.guild.id, member.id , member.name))
-            db.commit()
-        else:
-            cursor.execute("INSERT INTO leveling(GuildID, UserID, UserName, UserXP) VALUES (?, ?, ?, ?)", (member.guild.id, member.id , member.name, amount))
-            db.commit()
+        async with aiosqlite.connect(databaselocation) as db:
+            cursor = await db.execute("SELECT * FROM leveling WHERE GuildID = ? AND UserID = ?", (member.guild.id, member.id))
+            result = await cursor.fetchone()
+            if result is None:
+                await db.execute("INSERT INTO leveling(GuildID, UserID, UserName, UserXP) VALUES(?, ?, ?, ?)", (member.guild.id, member.id, member.name, amount))
+                await db.commit()
+                return amount
+            else:
+                xp = result[3] + amount
+                await db.execute("UPDATE leveling SET UserXP = ? WHERE GuildID = ? AND UserID = ?", (xp, member.guild.id, member.id))
+                await db.commit()
+                return xp
     except Exception as e:
         print(e)
         return e
