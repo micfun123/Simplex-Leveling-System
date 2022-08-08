@@ -36,7 +36,7 @@ def declaredatabase(path) -> str:
     return databaselocation
 
 async def givexp(amount , member) -> int:
-    """Will connect and open database then award the user the set amout of xp"""
+    """Will connect and open database then award the user the give amout of xp"""
     try:
         async with aiosqlite.connect(databaselocation) as db:
             cursor = await db.execute("SELECT * FROM leveling WHERE GuildID = ? AND UserID = ?", (member.guild.id, member.id))
@@ -53,6 +53,15 @@ async def givexp(amount , member) -> int:
     except Exception as e:
         print(e)
         return e
+
+async def getxp(member) -> int:
+    """Will connect to the database and retreve the xp"""
+    try:
+        print("")
+    except Exception as e:
+        print(e)
+        return e
+
 
 
         
